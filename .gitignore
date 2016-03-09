@@ -10,4 +10,4 @@ build
 *.*~
 *.swp
 manifest.mf
-/docs
+docs
