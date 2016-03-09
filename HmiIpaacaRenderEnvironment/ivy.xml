@@ -1,0 +1,28 @@
+<ivy-module version="2.0">
+   <info organisation="HMI" module="HmiIpaacaRenderEnvironment"/>
+   <configurations>
+      <include file="${ivy.settings.dir}/configurations.xml"/>
+   </configurations>
+   <dependencies>
+      <dependency org="HMI"      name="HmiEnvironmentBase"    rev="latest.${resolve.status}"  />
+      <dependency org="HMI"      name="HmiXml"             rev="latest.${resolve.status}"  />
+      <dependency org="HMI"      name="HmiUtil"            rev="latest.${resolve.status}"  />
+      <dependency org="HMI"      name="HmiAnimation"       rev="latest.${resolve.status}"  />
+      <dependency org="HMI"      name="HmiFaceAnimation"       rev="latest.${resolve.status}"  />
+      <dependency org="HMI"      name="HmiHeadAndGazeEmbodiments"       rev="latest.${resolve.status}"  />
+      <dependency org="HMI"      name="HmiAnimationEmbodiments"       rev="latest.${resolve.status}"  />
+      <dependency org="HMI"      name="HmiFaceEmbodiments"       rev="latest.${resolve.status}"  />
+      <dependency org="HMI"      name="HmiGraphics"        transitive="false" rev="latest.${resolve.status}"  />
+      <dependency org="HMI"      name="HmiFaceGraphics"    transitive="false" rev="latest.${resolve.status}"  />
+      <dependency org="HMI"      name="HmiRenderEnvironment"    transitive="false" rev="latest.${resolve.status}"  />
+
+
+      <dependency org="JogAmp" name="jogl" rev="latest.beta"  />                                 
+
+      <dependency org="jcip"     name="jcip-annotations"   rev="latest.release"  />   
+      <dependency org="slf4j"    name="slf4j-api"          rev="latest.release"  />
+      <dependency org="google"   name="guava"              rev="latest.release"  />
+      <dependency org="lombok"   name="lombok"             rev="latest.release"  />      
+ <dependency org="ipaaca"  name="ipaaca-java"       rev="latest.release"  />
+      </dependencies>
+</ivy-module>

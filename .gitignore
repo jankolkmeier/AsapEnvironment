@@ -1,0 +1,13 @@
+lib
+report
+dist
+privateprops
+.classpath
+.project
+.pydevproject
+.settings
+build
+*.*~
+*.swp
+manifest.mf
+/docs
