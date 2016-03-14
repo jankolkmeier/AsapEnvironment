@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="AsapRsbWorldEnvironment"  default="run">
-	<import file="../../../../hmibuild/build.xml" />
+	<import file="../../../hmibuild/build.xml" />
 <target name="-pre-compilation" depends="proto"/>	    
       <target name="proto">
 	    <echo message="Compiling protobuf file" />
