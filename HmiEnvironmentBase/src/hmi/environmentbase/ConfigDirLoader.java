@@ -9,7 +9,7 @@ import hmi.xml.XMLTokenizer;
 /**
  * Provides a way to specify a directory for e.g. a Loader. 
  * The directory is specified either by localdir (relative to shared.project.root), by dir (absolute path), 
- * or not at all (in which case its defaults to /lib/&ltCONFIGNAME&gt ).
+ * or not at all (in which case its defaults to /lib/&lt;CONFIGNAME&gt; ).
  * @author hvanwelbergen
  */
 public class ConfigDirLoader extends XMLStructureAdapter

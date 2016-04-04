@@ -186,7 +186,7 @@ public class HmiRenderEnvironment implements GLRenderObject, Environment, CopyEn
      *            for more information.
      * @param numStencilBits
      * @param enableFSAA
-     * @param int FSAA_samples
+     * @param FSAA_samples
      * @param fovy
      *            Field of view in y-direction (degrees)
      * @param fovyNear

@@ -31,6 +31,7 @@ import hmi.faceembodiments.AUConfig;
 import hmi.faceembodiments.EyelidMorpherEmbodiment;
 import hmi.faceembodiments.FACSFaceEmbodiment;
 import hmi.faceembodiments.FaceEmbodiment;
+import hmi.facegraphics.HMIFaceController;
 import hmi.math.Quat4f;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class HmiRenderBodyAndFaceEmbodiment extends HmiRenderBodyEmbodiment impl
 
     public synchronized void setEyelidMorpher(EyelidMorpherEmbodiment elm)
     {
-        eyelidMorpher = elm;
+        eyelidMorpher = elm; 
     }
 
     @Override

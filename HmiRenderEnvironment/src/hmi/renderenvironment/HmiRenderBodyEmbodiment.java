@@ -26,7 +26,6 @@ import hmi.environmentbase.Embodiment;
 import hmi.graphics.opengl.scenegraph.GLScene;
 import hmi.graphics.opengl.state.GLMaterial;
 import hmi.headandgazeembodiments.EulerHeadEmbodiment;
-import hmi.headandgazeembodiments.GazeEmbodiment;
 
 /** Loaded through HmiRenderEmbodimentLoader. CLEAN UP USING LOMBOK! */
 

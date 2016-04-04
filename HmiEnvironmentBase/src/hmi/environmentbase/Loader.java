@@ -33,7 +33,7 @@ public interface Loader
   String getId();
 
   /** Construct an engine or embodiment from the XML specification. Takes care of reading the content 
-  within the <Engine> or <Embodiment> tag (but not that tag). */
+  within the &lt;Engine&gt; or &lt;Embodiment&gt; tag (but not that tag). */
   void readXML(XMLTokenizer tokenizer, String loaderId, String vhId, String vhName, Environment[] environments, Loader ... requiredLoaders) throws IOException;
 
   void unload();  
