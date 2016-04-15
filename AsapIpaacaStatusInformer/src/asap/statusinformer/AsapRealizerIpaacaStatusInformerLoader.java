@@ -19,7 +19,7 @@ public class AsapRealizerIpaacaStatusInformerLoader implements StatusInformerLoa
             Loader... requiredLoaders) throws IOException
     {
         this.id = loaderId;
-        informer = new IpaacaStatusInformer("asaprealizer","status");
+        informer = new IpaacaStatusInformer(AsapRealizerIpaacaStatus.CATEGORY,AsapRealizerIpaacaStatus.KEY);
     }
 
     @Override
