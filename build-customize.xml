@@ -2,6 +2,16 @@
    xmlns:ac="antlib:net.sf.antcontrib"   
 >
  
+  <fileset id="lib.fileset" dir=".">
+      <include name="doclib/*.jar"/>      	  
+   </fileset>
+   <path id="doc-classpath">
+       <pathelement location="${build.classes.dir}"/>
+       <fileset refid="lib.fileset"/>
+   </path>
+   
+   
+   
  <filelist id="rebuildList" dir="${shared.project.root}" files="${rebuild.list}" />
  <!--filelist id="nbList" dir="${shared.project.root}" files="${nb.list}" /-->
    
@@ -159,16 +169,23 @@
         <delegate target="checkstylexml" list="rebuildList"/>
    </target>
 
-
-   <target name="docall" description="Generate integrated Javadoc for all HMI/* projects">     
+   <target name="-pre-docAll">   
+      <mkdir dir="doclib"/>
+	  <copy todir="doclib" flatten="true">
+	  <fileset dir=".">
+		<include name="**/lib/*.jar"/>
+	  </fileset>
+        </copy>
+	  <delegate target="-pre-doc" list="rebuildList" verbose="true"/>
+   </target>
+   
+   <target name="docall" depends="-pre-docAll" description="Generate integrated Javadoc for all HMI/* projects">     
         <javadoc source="1.8" 
             destdir="${javadoc.dir}"
-            Overview="javadoc-overview.html" 
-            doctitle="API Documentation for HMI Environment packages"
+            doctitle="API Documentation for AsapEnvironment packages"
             private="true" 
             use="true"
             author="true"
-            link="http://java.sun.com/javase/8/docs/api/"
             breakiterator="yes"
         > 
 <!--
@@ -176,40 +193,31 @@
             footer="&lt;a href='http://hmi.ewi.utwente.nl' target='_blank'&gt;HMI Homepage&lt;/a%gt;" 
             bottom="Disclaimer, availability, License..."
 -->
-			
-            <classpath refid="javac-classpath"/>                
+			<classpath refid="doc-classpath"/>
 				<sourcepath>
-					<pathelement path="AsapBodyAndFaceEmbodiments/src/"/>
-					<pathelement path="HmiAnimationEmbodiments/src/"/>
-                    <pathelement path="HmiAudioEnvironment/src/"/>
-					<pathelement path="HmiDebug/src/"/>                    
-					<pathelement path="HmiEnvironmentBase/src/"/>					
-                    <pathelement path="HmiFaceEmbodiments/src/"/>
-                    <pathelement path="HmiHeadAndGazeEmbodiments/src/"/>					
+					<pathelement path="AsapBodyAndFaceEmbodiments/build/src-delomboked"/>
+					<pathelement path="AsapRsbWorldEnvironment/java/build/src-delomboked"/>
+				    <pathelement path="AsapIpaacaWorldEnvironment/build/src-delomboked"/>
+                    <pathelement path="AsapIpaacaStatusInformer/build/src-delomboked"/>
+					<pathelement path="HmiAnimationEmbodiments/build/src-delomboked"/>
+                    <pathelement path="HmiAudioEnvironment/build/src-delomboked"/>
+					<pathelement path="HmiDebug/build/src-delomboked"/>                    
+					<pathelement path="HmiEnvironmentBase/build/src-delomboked"/>					
+                    <pathelement path="HmiFaceEmbodiments/build/src-delomboked"/>
+                    <pathelement path="HmiHeadAndGazeEmbodiments/build/src-delomboked"/>					
 					<pathelement path="HmiIpaacaRenderEnvironment/src/"/>					
-					<pathelement path="HmiJComponentEnvironment/src/"/>					
-					<pathelement path="HmiMixedAnimationEnvironment/src/"/>					                    
-					<pathelement path="HmiPhysicsEmbodiments/src/"/>
-					<pathelement path="HmiPhysicsEnvironment/src/"/>                    
-					<pathelement path="HmiRenderEnvironment/src/"/>					
-					<pathelement path="AsapRsbEmbodiments/src/"/>                    
-					<pathelement path="HmiRsbRenderEnvironment/src/"/>					                    
-					<pathelement path="HmiTextEmbodiments/src/"/>                    
-					<pathelement path="HmiWorldObjectEnvironment/src/"/>
+					<pathelement path="HmiJComponentEnvironment/build/src-delomboked"/>					
+					<pathelement path="HmiMixedAnimationEnvironment/build/src-delomboked"/>					                    
+					<pathelement path="HmiPhysicsEmbodiments/build/src-delomboked"/>
+					<pathelement path="HmiPhysicsEnvironment/build/src-delomboked"/>                    
+					<pathelement path="HmiRenderEnvironment/build/src-delomboked"/>					
+					<pathelement path="AsapRsbEmbodiments/build/src-delomboked"/>                    
+					<pathelement path="HmiRsbRenderEnvironment/build/src-delomboked"/>					                    
+					<pathelement path="HmiTextEmbodiments/build/src-delomboked"/>                    
+					<pathelement path="HmiWorldObjectEnvironment/build/src-delomboked"/>
                 </sourcepath>
         </javadoc>
         <mkdir dir="${dist.dir}"/>
 	     <zip basedir="${javadoc.dir}" destfile="${dist.dir}/javadoc.zip" />
     </target>
-    
-    <target name="javancssAll" description="Generate a javancs report">
-      <mkdir dir="${build.classes.dir}"/>
-      <javancss srcdir="."
-            generateReport="true"
-            format="xml"
-             outputfile="${build.classes.dir}/javancss_metrics.xml"
-            abortOnFail="false"
-            includes="**/*.java"
-            />
-    </target> 
 </project>
