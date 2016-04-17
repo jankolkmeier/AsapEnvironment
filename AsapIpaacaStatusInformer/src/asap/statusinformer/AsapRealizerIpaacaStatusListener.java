@@ -1,6 +1,7 @@
 package asap.statusinformer;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.google.common.collect.ImmutableSet;
@@ -42,9 +43,12 @@ public class AsapRealizerIpaacaStatusListener
         futures.take(status);
     }
     
-    public void waitForStatus(String status, long timeout, TimeUnit unit) throws InterruptedException
+    public void waitForStatus(String status, long timeout, TimeUnit unit) throws InterruptedException, TimeoutException
     {
-        futures.take(status, timeout, unit);
+       if(futures.take(status, timeout, unit)==null)
+       {
+           throw new TimeoutException();
+       }
     }
     
     public void close()
