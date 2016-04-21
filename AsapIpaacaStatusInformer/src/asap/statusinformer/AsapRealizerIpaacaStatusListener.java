@@ -12,6 +12,11 @@ import ipaaca.IUEventType;
 import ipaaca.InputBuffer;
 import ipaaca.util.communication.FutureIUs;
 
+/**
+ * Utitility to receive and wait for specific AsapRealizer status messages (e.g. to wait till AsapRealizer is fully started).
+ * @author hvanwelbergen
+ *
+ */
 public class AsapRealizerIpaacaStatusListener
 {
     private final FutureIUs futures;

@@ -2,6 +2,11 @@ package asap.statusinformer;
 
 import hmi.environmentbase.StatusInformer;
 
+/**
+ * Submits AsapRealizer status information over ipaaca messages
+ * @author hvanwelbergen
+ *
+ */
 public class AsapRealizerIpaacaStatusInformer implements StatusInformer
 {
     private IpaacaStatusInformer informer;
@@ -11,7 +16,8 @@ public class AsapRealizerIpaacaStatusInformer implements StatusInformer
         informer = new IpaacaStatusInformer(AsapRealizerIpaacaStatus.CATEGORY, AsapRealizerIpaacaStatus.KEY);
     }
 
-    public void unload()
+    @Override
+    public void close()
     {
         informer.close();
     }

@@ -20,7 +20,7 @@ public class AsapRealizerIpaacaStatusListenerIntegrationTest
         AsapRealizerIpaacaStatusInformer informer = new AsapRealizerIpaacaStatusInformer();
         informer.setStatus("initialized");
         listener.waitForStatus("initialized");
-        informer.unload();
+        informer.close();
     }
     
     @Test(expected=TimeoutException.class)
@@ -29,6 +29,6 @@ public class AsapRealizerIpaacaStatusListenerIntegrationTest
         AsapRealizerIpaacaStatusInformer informer = new AsapRealizerIpaacaStatusInformer();
         informer.setStatus("initialized");
         listener.waitForStatus("started",500, TimeUnit.MILLISECONDS);
-        informer.unload();        
+        informer.close();        
     }
 }

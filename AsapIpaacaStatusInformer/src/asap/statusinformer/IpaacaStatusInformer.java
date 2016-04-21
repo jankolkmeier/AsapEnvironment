@@ -35,6 +35,7 @@ public class IpaacaStatusInformer implements StatusInformer
         outBuffer.add(message);
     }
     
+    @Override
     public void close()
     {
         outBuffer.close();
