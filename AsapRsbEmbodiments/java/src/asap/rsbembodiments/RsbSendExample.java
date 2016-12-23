@@ -34,7 +34,7 @@ public class RsbSendExample
         informer.activate();
 
         AnimationData jd = AnimationData.newBuilder().addAllJointQuats(Arrays.asList(1f,2f,3f,4f)).build();
-        informer.send(jd);
+        informer.publish(jd);
         informer.deactivate();
     }
 }
