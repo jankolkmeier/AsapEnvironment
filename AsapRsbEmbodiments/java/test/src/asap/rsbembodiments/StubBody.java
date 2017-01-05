@@ -39,7 +39,7 @@ public class StubBody
     private class JointDataConfigCallback extends EventCallback
     {
         @Override
-        public Event invoke(final Event request) throws Throwable
+        public Event invoke(final Event request) //throws Throwable
         {
             return new Event(AnimationDataConfigReply.class, AnimationDataConfigReply.newBuilder()
                     .setSkeleton(VJointRsbUtils.toRsbSkeleton(vjoint)).build());
