@@ -117,6 +117,12 @@ public class RsbEmbodiment implements Embodiment
             log.error("Did not get AnimationDataConfigReply for character \"{}\" on scope \"{}\"", characterId, characterScope);
             throw new RuntimeException(e);
         }
+        catch (InterruptedException e)
+        {
+            Thread.interrupted();
+            log.error("Did not get AnimationDataConfigReply for character \"{}\" on scope \"{}\"", characterId, characterScope);
+            throw new RuntimeException(e);
+        }
         finally
         {
             try
@@ -180,6 +186,10 @@ public class RsbEmbodiment implements Embodiment
         {
             throw new RuntimeException(e);
         }
+        catch (RSBException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public RsbEmbodiment()
@@ -205,7 +215,7 @@ public class RsbEmbodiment implements Embodiment
     {
         try
         {
-            animationSelectionInformer.send(AnimationSelection.newBuilder().addAllSelectedJoints(selectedJoints)
+            animationSelectionInformer.publish(AnimationSelection.newBuilder().addAllSelectedJoints(selectedJoints)
                     .addAllSelectedMorphs(selectedMorphs).setCharacterId(characterId).build());
         }
         catch (RSBException e)
@@ -218,7 +228,7 @@ public class RsbEmbodiment implements Embodiment
     {
         try
         {
-            jointDataInformer.send(data);
+            jointDataInformer.publish(data);
         }
         catch (RSBException e)
         {

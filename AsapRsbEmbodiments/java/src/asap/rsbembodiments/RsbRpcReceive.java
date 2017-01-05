@@ -20,7 +20,7 @@ public class RsbRpcReceive
     public static class EchoCallback extends EventCallback
     {
         @Override
-        public Event invoke(final Event request) throws Throwable
+        public Event invoke(final Event request) //throws Throwable
         {
             System.out.println("invoke");
             AnimationDataConfigRequest jdcr = (AnimationDataConfigRequest) request.getData();
@@ -54,6 +54,12 @@ public class RsbRpcReceive
         server.addMethod("jointDataConfigRequest", new EchoCallback());
 
         // Block until server.deactivate or process shutdown
-        server.waitForShutdown();
+        try {
+            server.waitForShutdown();
+        }
+        catch (InterruptedException e)
+        {
+            Thread.interrupted();
+        }
     }
 }
