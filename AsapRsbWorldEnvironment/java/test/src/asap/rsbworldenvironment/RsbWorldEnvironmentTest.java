@@ -44,7 +44,11 @@ public class RsbWorldEnvironmentTest
     {
         DefaultConverterRepository.getDefaultConverterRepository().addConverter(new ProtocolBufferConverter<>(RSBWorldObjects.getDefaultInstance()));
         informer = factory.createInformer(RsbWorldEnvironment.SCENEINFO_SCOPE);
-        informer.activate();
+        try {
+            informer.activate();
+        } catch (RSBException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     @After
@@ -57,7 +61,7 @@ public class RsbWorldEnvironmentTest
     public void test() throws InterruptedException, RSBException
     {
         new RsbWorldEnvironment(mockWoManager);
-        informer.send(RSBWorldObjects.newBuilder()
+        informer.publish(RSBWorldObjects.newBuilder()
                      .addWorldObjects(RSBWorldObject.newBuilder().setObjectId("camera").addAllPosition(Floats.asList(1,1,1)).build())
                      .addWorldObjects(RSBWorldObject.newBuilder().setObjectId("ent 2").addAllPosition(Floats.asList(1,1,1)).build())
                      .build());
@@ -70,7 +74,7 @@ public class RsbWorldEnvironmentTest
     public void testPos()throws InterruptedException, RSBException
     {
         new RsbWorldEnvironment(woManager);
-        informer.send(RSBWorldObjects.newBuilder()
+        informer.publish(RSBWorldObjects.newBuilder()
                 .addWorldObjects(RSBWorldObject.newBuilder().setObjectId("camera").addAllPosition(Floats.asList(0.12f, 0.12f, 0f)).build())
                 .addWorldObjects(RSBWorldObject.newBuilder().setObjectId("ent 2").addAllPosition(Floats.asList(0,0,2)).build())
                 .build());
@@ -90,7 +94,7 @@ public class RsbWorldEnvironmentTest
         woManager.addWorldObject("ent 1", ent1);
         new RsbWorldEnvironment(woManager);
         
-        informer.send(RSBWorldObjects.newBuilder()
+        informer.publish(RSBWorldObjects.newBuilder()
                 .addWorldObjects(RSBWorldObject.newBuilder().setObjectId("ent 1").addAllPosition(Floats.asList(0.1f,0.2f,2f)).build())
                 .addWorldObjects(RSBWorldObject.newBuilder().setObjectId("ent 2").addAllPosition(Floats.asList(0,0,2)).build())
                 .build());
