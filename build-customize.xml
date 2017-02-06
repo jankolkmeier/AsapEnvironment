@@ -212,6 +212,7 @@
 					<pathelement path="HmiPhysicsEnvironment/build/src-delomboked"/>                    
 					<pathelement path="HmiRenderEnvironment/build/src-delomboked"/>					
 					<pathelement path="AsapRsbEmbodiments/build/src-delomboked"/>                    
+					<pathelement path="HmiUnityEmbodiments/build/src-delomboked"/>                    
 					<pathelement path="HmiRsbRenderEnvironment/build/src-delomboked"/>					                    
 					<pathelement path="HmiTextEmbodiments/build/src-delomboked"/>                    
 					<pathelement path="HmiWorldObjectEnvironment/build/src-delomboked"/>
