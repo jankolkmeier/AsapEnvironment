@@ -265,15 +265,17 @@ public class UnityEmbodiment extends AbstractWorker
             ArrayNodeBuilder boneArrayBuilder = array();
             for (int j = 0; j < jointList.size(); j++)
             {
-                VJoint cur = jointList.get(j);
-                float[] translation = new float[3];
-                float[] rotation = new float[4];
-                cur.getTranslation(translation);
-                cur.getRotation(rotation);
                 ArrayNodeBuilder transformArrayBuilder = array();
-                transformArrayBuilder.with(UnityEmbodiment.round(translation[0], 4));
-                transformArrayBuilder.with(UnityEmbodiment.round(translation[1], 4));
-                transformArrayBuilder.with(UnityEmbodiment.round(translation[2], 4));
+                VJoint cur = jointList.get(j);
+                if (j<2) {
+                    float[] translation = new float[3];
+                    cur.getTranslation(translation);
+                    transformArrayBuilder.with(UnityEmbodiment.round(translation[0], 4));
+                    transformArrayBuilder.with(UnityEmbodiment.round(translation[1], 4));
+                    transformArrayBuilder.with(UnityEmbodiment.round(translation[2], 4));
+                }
+                float[] rotation = new float[4];
+                cur.getRotation(rotation);
                 transformArrayBuilder.with(UnityEmbodiment.round(rotation[1], 4));
                 transformArrayBuilder.with(UnityEmbodiment.round(rotation[2], 4));
                 transformArrayBuilder.with(UnityEmbodiment.round(rotation[3], 4));
@@ -292,13 +294,15 @@ public class UnityEmbodiment extends AbstractWorker
             for (int j = 0; j < jointList.size(); j++)
             {
                 VJoint cur = jointList.get(j);
-                float[] translation = new float[3];
+                if (j<2) {
+                    float[] translation = new float[3];
+                    cur.getTranslation(translation);
+                    out.putFloat(translation[0]);
+                    out.putFloat(translation[1]);
+                    out.putFloat(translation[2]);
+                }
                 float[] rotation = new float[4];
-                cur.getTranslation(translation);
                 cur.getRotation(rotation);
-                out.putFloat(translation[0]);
-                out.putFloat(translation[1]);
-                out.putFloat(translation[2]);
                 out.putFloat(rotation[1]);
                 out.putFloat(rotation[2]);
                 out.putFloat(rotation[3]);
