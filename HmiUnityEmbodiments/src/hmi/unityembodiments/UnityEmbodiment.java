@@ -262,28 +262,32 @@ public class UnityEmbodiment extends AbstractWorker
 
         if (!useBinary)
         {
-            ArrayNodeBuilder boneArrayBuilder = array();
+            ArrayNodeBuilder boneTranslationArrayBuilder = array();
+            ArrayNodeBuilder boneValueArrayBuilder = array();
             for (int j = 0; j < jointList.size(); j++)
             {
-                ArrayNodeBuilder transformArrayBuilder = array();
                 VJoint cur = jointList.get(j);
                 if (j<2) {
+                    ArrayNodeBuilder translationArrayBuilder = array();
                     float[] translation = new float[3];
                     cur.getTranslation(translation);
-                    transformArrayBuilder.with(UnityEmbodiment.round(translation[0], 4));
-                    transformArrayBuilder.with(UnityEmbodiment.round(translation[1], 4));
-                    transformArrayBuilder.with(UnityEmbodiment.round(translation[2], 4));
+                    translationArrayBuilder.with(UnityEmbodiment.round(translation[0], 4));
+                    translationArrayBuilder.with(UnityEmbodiment.round(translation[1], 4));
+                    translationArrayBuilder.with(UnityEmbodiment.round(translation[2], 4));
+                    boneTranslationArrayBuilder.with(object().with("t", translationArrayBuilder.end()));
                 }
+                ArrayNodeBuilder rotationArrayBuilder = array();
                 float[] rotation = new float[4];
                 cur.getRotation(rotation);
-                transformArrayBuilder.with(UnityEmbodiment.round(rotation[1], 4));
-                transformArrayBuilder.with(UnityEmbodiment.round(rotation[2], 4));
-                transformArrayBuilder.with(UnityEmbodiment.round(rotation[3], 4));
-                transformArrayBuilder.with(UnityEmbodiment.round(rotation[0], 4));
-                boneArrayBuilder.with(object().with("t", transformArrayBuilder.end()));
+                rotationArrayBuilder.with(UnityEmbodiment.round(rotation[1], 4));
+                rotationArrayBuilder.with(UnityEmbodiment.round(rotation[2], 4));
+                rotationArrayBuilder.with(UnityEmbodiment.round(rotation[3], 4));
+                rotationArrayBuilder.with(UnityEmbodiment.round(rotation[0], 4));
+                boneValueArrayBuilder.with(object().with("r", rotationArrayBuilder.end()));
             }
 
-            msgBuilder.with(UnityEmbodimentConstants.AUPROT_PROP_BONE_VALUES, boneArrayBuilder.end());
+            msgBuilder.with(UnityEmbodimentConstants.AUPROT_PROP_BONE_TRANSLATIONS, boneTranslationArrayBuilder.end());
+            msgBuilder.with(UnityEmbodimentConstants.AUPROT_PROP_BONE_VALUES, boneValueArrayBuilder.end());
         }
         else
         {

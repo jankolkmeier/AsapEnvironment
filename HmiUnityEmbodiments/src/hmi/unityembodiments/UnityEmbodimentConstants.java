@@ -24,6 +24,7 @@ public final class UnityEmbodimentConstants
     public static final String AUPROT_PROP_N_OBJECTS = "nObjects";
     public static final String AUPROT_PROP_BONES = "bones";
     public static final String AUPROT_PROP_BONE_VALUES = "boneValues";
+    public static final String AUPROT_PROP_BONE_TRANSLATIONS = "boneTranslations";
     public static final String AUPROT_PROP_BINARY_BONE_VALUES = "binaryBoneValues";
     public static final String AUPROT_PROP_FACETARGETS = "faceTargets";
     public static final String AUPROT_PROP_FACETARGET_VALUES = "faceTargetValues";
