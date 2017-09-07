@@ -15,6 +15,8 @@ import hmi.xml.XMLScanException;
 import hmi.xml.XMLStructureAdapter;
 import hmi.xml.XMLTokenizer;
 import lombok.extern.slf4j.Slf4j;
+import nl.utwente.hmi.middleware.Middleware;
+import nl.utwente.hmi.middleware.loader.GenericMiddlewareLoader;
 
 /**
  * Loads a UnityEmbodiment
@@ -36,13 +38,33 @@ public class UnityEmbodimentLoader implements EmbodimentLoader
     public void readXML(XMLTokenizer tokenizer, String loaderId, String vhId, String vhName, Environment[] environments,
             Loader... requiredLoaders) throws IOException
     {
-        boolean useBinary = true;
+        boolean useBinary = false;
         WorldObjectEnvironment woe = null;
         CopyEnvironment ce = null;
+        
+        String sharedMiddlewareId = null;
+
+        Middleware m = null;
+
+        while (!tokenizer.atETag("Loader")) {
+	        if (tokenizer.atSTag("MiddlewareOptions")) {
+	        	m = readMiddlewareOptions(tokenizer);
+	        } else if (tokenizer.atSTag("SharedMiddleware")) {
+	        	sharedMiddlewareId = tokenizer.getAttribute("id");
+                tokenizer.takeSTag("SharedMiddleware");
+                tokenizer.takeETag("SharedMiddleware");
+	        } else {
+		    	throw new XMLScanException("UnityMechanimEmbodimentLoader found unknown option: "+tokenizer.getTagName());
+	        }
+        }
+        
         for (Environment e : environments)
         {
             if (e instanceof CopyEnvironment) ce = (CopyEnvironment) e;
             else if (e instanceof WorldObjectEnvironment) woe = (WorldObjectEnvironment) e;
+            if (e instanceof SharedMiddlewareLoader && ((SharedMiddlewareLoader) e).getId().equals(sharedMiddlewareId)) {
+            	m = ((SharedMiddlewareLoader) e).getMiddleware();
+            }
         }
         if (ce == null)
         {
@@ -52,30 +74,16 @@ public class UnityEmbodimentLoader implements EmbodimentLoader
         {
             throw new RuntimeException("UnityMechanimEmbodiment requires an Environment of type WorldObjectEnvironment");
         }
-
-        if (!tokenizer.atSTag("MiddlewareOptions"))
-        {
-            throw new XMLScanException("UnityMechanimEmbodiment requires an inner MiddlewareOptions element");
+        
+        if (m == null && sharedMiddlewareId != null) {
+	    	throw new XMLScanException("UnityMechanimEmbodiment didn't load Middleware. No SharedMiddleware with id "+sharedMiddlewareId+" in Environment");
+        } else if (m == null) {
+	    	throw new XMLScanException("UnityMechanimEmbodiment didn't load Middleware. User MiddleWareOptions or SharedMiddleware");
         }
 
-        HashMap<String, String> attrMap = tokenizer.getAttributes();
-        XMLStructureAdapter adapter = new XMLStructureAdapter();
-        String loaderclass = adapter.getRequiredAttribute("loaderclass", attrMap, tokenizer);
-
-        tokenizer.takeSTag("MiddlewareOptions");
-
-        Properties props = new Properties();
-        while (tokenizer.atSTag("MiddlewareProperty"))
-        {
-            XMLStructureAdapter adapter2 = new XMLStructureAdapter();
-            props.put(adapter2.getRequiredAttribute("name", attrMap, tokenizer),
-                    adapter2.getRequiredAttribute("value", attrMap, tokenizer));
-            tokenizer.takeSTag("MiddlewareProperty");
-            tokenizer.takeETag("MiddlewareProperty");
-        }
-
-        ue = new UnityEmbodiment(vhId, loaderId, loaderclass, useBinary, props, woe, ce);
-        System.out.println("Waiting for AgentSpec...");
+        ue = new UnityEmbodiment(vhId, loaderId, m, useBinary, woe, ce);
+        log.info("Waiting for AgentSpec...");
+        
         while (!ue.isConfigured())
         {
             ue.SendAgentSpecRequest(vhId, "/scene");
@@ -90,11 +98,29 @@ public class UnityEmbodimentLoader implements EmbodimentLoader
             }
         }
         ce.addCopyEmbodiment(ue);
-
         log.info("Registered unityembodiment with copyenvironment");
-        tokenizer.takeETag("MiddlewareOptions");
     }
 
+    
+    private Middleware readMiddlewareOptions(XMLTokenizer tokenizer) throws IOException {
+        HashMap<String, String> attrMap = tokenizer.getAttributes();
+        XMLStructureAdapter adapter = new XMLStructureAdapter();
+        String loaderclass = adapter.getRequiredAttribute("loaderclass", attrMap, tokenizer);
+        tokenizer.takeSTag("MiddlewareOptions");
+        Properties props = new Properties();
+        while (tokenizer.atSTag("MiddlewareProperty"))
+        {
+            XMLStructureAdapter adapter2 = new XMLStructureAdapter();
+            props.put(adapter2.getRequiredAttribute("name", attrMap, tokenizer),
+                    adapter2.getRequiredAttribute("value", attrMap, tokenizer));
+            tokenizer.takeSTag("MiddlewareProperty");
+            tokenizer.takeETag("MiddlewareProperty");
+        }
+        GenericMiddlewareLoader gml = new GenericMiddlewareLoader(loaderclass, props);
+        tokenizer.takeETag("MiddlewareOptions");
+        return gml.load();
+    }
+    
     @Override
     public void unload()
     {

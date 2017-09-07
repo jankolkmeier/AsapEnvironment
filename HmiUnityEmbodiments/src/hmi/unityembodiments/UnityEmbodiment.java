@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import hmi.animation.VJoint;
@@ -37,7 +36,6 @@ import nl.utwente.hmi.middleware.Middleware;
 import nl.utwente.hmi.middleware.MiddlewareListener;
 import nl.utwente.hmi.middleware.helpers.JsonNodeBuilders.ArrayNodeBuilder;
 import nl.utwente.hmi.middleware.helpers.JsonNodeBuilders.ObjectNodeBuilder;
-import nl.utwente.hmi.middleware.loader.GenericMiddlewareLoader;
 import nl.utwente.hmi.middleware.worker.AbstractWorker;
 
 /**
@@ -69,7 +67,7 @@ public class UnityEmbodiment extends AbstractWorker
 
     private WorldObjectEnvironment woe;
 
-    public UnityEmbodiment(String vhId, String loaderId, String specificMiddlewareLoader, boolean useBinary, Properties props,
+    public UnityEmbodiment(String vhId, String loaderId, Middleware m, boolean useBinary,
             WorldObjectEnvironment woe, CopyEnvironment ce)
     {
         this.vhId = vhId;
@@ -80,11 +78,10 @@ public class UnityEmbodiment extends AbstractWorker
         msgbuf = new byte[32768]; // Buffer: ~100bones * (4bytes * (3pos + 4rot) + 255) = ~28300
         objectUpdates = new LinkedBlockingQueue<WorldObjectUpdate>();
 
-        GenericMiddlewareLoader gml = new GenericMiddlewareLoader(specificMiddlewareLoader, props);
-        middleware = gml.load();
-        middleware.addListener(this);
         configured = false;
+        m.addListener(this);
         (new Thread(this)).start();
+        middleware = m;
     }
     
     public void shutdown()
@@ -134,6 +131,8 @@ public class UnityEmbodiment extends AbstractWorker
         middleware.sendData(msg);
     }
 
+    
+    // TODO: MA - this is called once for each UnityEmbodiment agent...
     void ParseWorldObjectUpdate(JsonNode jn)
     {
         int nObjects = jn.get(UnityEmbodimentConstants.AUPROT_PROP_N_OBJECTS).asInt();
@@ -167,16 +166,20 @@ public class UnityEmbodiment extends AbstractWorker
     void ParseAgentSpec(JsonNode jn)
     {
         log.info("reading agent spec (V2)");
+        String id = jn.get(UnityEmbodimentConstants.AUPROT_PROP_AGENTID).asText();
+        int nBones = jn.get(UnityEmbodimentConstants.AUPROT_PROP_N_BONES).asInt(0);
+        int nFaceTargets = jn.get(UnityEmbodimentConstants.AUPROT_PROP_N_FACETARGETS).asInt(0);
+        
+        if (!id.equals(vhId)) {
+            log.info("Ignoring agentspec for different vhId: {} (this is {})", id, vhId);
+            return;
+        }
 
         HashMap<String, VJoint> jointsLUT = new HashMap<String, VJoint>();
         faceMorphTargets = new LinkedHashMap<String, Float>();
         jointList = new ArrayList<VJoint>();
-
-        String id = jn.get(UnityEmbodimentConstants.AUPROT_PROP_AGENTID).asText();
-        int nBones = jn.get(UnityEmbodimentConstants.AUPROT_PROP_N_BONES).asInt(0);
-        int nFaceTargets = jn.get(UnityEmbodimentConstants.AUPROT_PROP_N_FACETARGETS).asInt(0);
-
-        log.info("Parsing skeleton %s, with %d bones...", id, nBones);
+        
+        log.info("Parsing skeleton {}, with {} bones...", id, nBones);
 
         for (Iterator<JsonNode> bones_iter = jn.get(UnityEmbodimentConstants.AUPROT_PROP_BONES).elements(); bones_iter.hasNext();)
         {
@@ -216,13 +219,13 @@ public class UnityEmbodiment extends AbstractWorker
                     x, y, z, qw, qx, qy, qz));
         }
 
-        log.info("...and %d face targets...", nFaceTargets);
+        log.info("...and {} face targets...", nFaceTargets);
         for (Iterator<JsonNode> faceTargets_iter = jn.get(UnityEmbodimentConstants.AUPROT_PROP_FACETARGETS).elements(); faceTargets_iter
                 .hasNext();)
         {
             JsonNode faceTarget = faceTargets_iter.next();
             faceMorphTargets.put(faceTarget.asText(), 0.0f);
-            log.debug(String.format("    Face Target: %s", faceTarget.asText()));
+            log.debug(String.format("    Face Target: {}", faceTarget.asText()));
         }
         ce.addCopyEmbodiment(this);
         configured = true;
