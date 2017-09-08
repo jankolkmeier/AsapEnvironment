@@ -97,8 +97,8 @@ public class UnityEmbodimentLoader implements EmbodimentLoader
                 e1.printStackTrace();
             }
         }
-        ce.addCopyEmbodiment(ue);
-        log.info("Registered unityembodiment with copyenvironment");
+        //ce.addCopyEmbodiment(ue);
+        //log.info("Registered unityembodiment with copyenvironment");
     }
 
     
