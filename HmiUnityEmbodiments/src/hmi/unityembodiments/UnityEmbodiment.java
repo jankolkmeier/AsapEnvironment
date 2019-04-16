@@ -16,12 +16,10 @@ import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import hmi.animation.VJoint;
-import hmi.animationembodiments.SkeletonEmbodiment;
 import hmi.environment.bodyandfaceembodiments.BodyAndFaceEmbodiment;
 import hmi.environmentbase.CopyEnvironment;
 import hmi.faceanimation.FaceController;
 import hmi.faceanimation.model.MPEG4Configuration;
-import hmi.faceembodiments.FaceEmbodiment;
 import hmi.worldobjectenvironment.VJointWorldObject;
 import hmi.worldobjectenvironment.WorldObject;
 import hmi.worldobjectenvironment.WorldObjectEnvironment;
@@ -45,7 +43,7 @@ import nl.utwente.hmi.middleware.worker.AbstractWorker;
  */
 @Slf4j
 public class UnityEmbodiment extends AbstractWorker
-        implements MiddlewareListener, SkeletonEmbodiment, FaceEmbodiment, BodyAndFaceEmbodiment, FaceController
+        implements MiddlewareListener, BodyAndFaceEmbodiment, FaceController
 {
 
     private Middleware middleware;
@@ -82,6 +80,14 @@ public class UnityEmbodiment extends AbstractWorker
         m.addListener(this);
         (new Thread(this)).start();
         middleware = m;
+    }
+    
+    public String getCharId() {
+    	return this.vhId;
+    }
+    
+    public Middleware getMiddleware() {
+    	return middleware;
     }
     
     public void shutdown()
