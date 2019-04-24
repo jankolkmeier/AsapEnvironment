@@ -67,8 +67,14 @@ public class StdOutTextEmbodiment implements TextEmbodiment, EmbodimentLoader
 
     /** print to stdout */
     @Override
-    public void setText(String text)
+    public void setText(String textProgress)
     {
-        System.out.println(text);
+        System.out.println(textProgress);
+    }
+    
+    @Override
+    public void setText(String textProgress, String textComplete)
+    {
+    	setText(textProgress);
     }
 }
