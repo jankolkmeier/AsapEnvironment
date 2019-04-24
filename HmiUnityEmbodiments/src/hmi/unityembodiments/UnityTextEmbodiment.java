@@ -36,10 +36,9 @@ public class UnityTextEmbodiment implements TextEmbodiment {
 		return id;
 	}
 
-	@Override
-	public void setText(String text) {
-		if (lastText.equals(text)) return;
-		lastText = text;
+	public void setText(String textProgress, String textComplete) {
+		if (lastText.equals(textProgress)) return;
+		lastText = textProgress;
 		/*
 		{
 		    "msgType": "subtitles",
@@ -52,13 +51,19 @@ public class UnityTextEmbodiment implements TextEmbodiment {
     			UnityEmbodimentConstants.AUPROT_PROP_MSGTYPE, UnityEmbodimentConstants.AUPROT_MSGTYPE_SUBTITLES,
     			UnityEmbodimentConstants.AUPROT_PROP_CMD, UnityEmbodimentConstants.AUPROT_SUBTITLES_SHOW,
     			UnityEmbodimentConstants.AUPROT_PROP_AGENTID, this.charId).end();
-    	msg.put(UnityEmbodimentConstants.AUPROT_SUBTITLES_CONTENT, text);
+    	msg.put(UnityEmbodimentConstants.AUPROT_SUBTITLES_PROGRESS, textProgress);
+    	msg.put(UnityEmbodimentConstants.AUPROT_SUBTITLES_COMPLETE, textComplete);
 		middleware.sendData(msg);
 		lastUpdate = System.currentTimeMillis();
 		/*
 		timer.cancel();
 		timer.purge();
 		timer = new Timer();*/
+	}
+	
+	@Override
+	public void setText(String textProgress) {
+		setText(textProgress, textProgress+"...");
 	}
 	
 	public void hideText() {

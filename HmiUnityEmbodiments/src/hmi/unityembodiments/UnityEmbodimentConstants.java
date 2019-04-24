@@ -48,6 +48,7 @@ public final class UnityEmbodimentConstants
     public static final String AUPROT_MSGTYPE_SUBTITLES = "subtitles";
     public static final String AUPROT_SUBTITLES_SHOW = "ShowSubtitle";
     public static final String AUPROT_SUBTITLES_HIDE = "HideSubtitle";
-    public static final String AUPROT_SUBTITLES_CONTENT= "content";
+    public static final String AUPROT_SUBTITLES_PROGRESS = "progress";
+    public static final String AUPROT_SUBTITLES_COMPLETE = "complete";
 
 }
