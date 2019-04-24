@@ -8,6 +8,7 @@
       <dependency org="HMI"     name="HmiFaceEmbodiments"            rev="latest.${resolve.status}"    />
       <dependency org="HMI"     name="HmiAnimation"            rev="latest.${resolve.status}"    />
       <dependency org="HMI"     name="HmiAnimationEmbodiments"  rev="latest.${resolve.status}"    />
+      <dependency org="HMI"     name="HmiTextEmbodiments"  rev="latest.${resolve.status}"    />
       <dependency org="HMI"     name="HmiWorldObjectEnvironment"  rev="latest.${resolve.status}"    />
       <dependency org="HMI"     name="HmiEnvironmentBase"  rev="latest.${resolve.status}"    />
       <dependency org="HMI"     name="AsapBodyAndFaceEmbodiments"  rev="latest.${resolve.status}"    />
