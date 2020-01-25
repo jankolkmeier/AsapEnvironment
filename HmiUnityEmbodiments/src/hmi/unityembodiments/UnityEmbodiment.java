@@ -21,6 +21,8 @@ import hmi.environment.bodyandfaceembodiments.BodyAndFaceEmbodiment;
 import hmi.environmentbase.CopyEnvironment;
 import hmi.faceanimation.FaceController;
 import hmi.faceanimation.model.MPEG4Configuration;
+import hmi.faceembodiments.AUConfig;
+import hmi.faceembodiments.FACSFaceEmbodiment;
 import hmi.faceembodiments.FaceEmbodiment;
 import hmi.worldobjectenvironment.VJointWorldObject;
 import hmi.worldobjectenvironment.WorldObject;
@@ -45,7 +47,7 @@ import nl.utwente.hmi.middleware.worker.AbstractWorker;
  */
 @Slf4j
 public class UnityEmbodiment extends AbstractWorker
-        implements MiddlewareListener, SkeletonEmbodiment, FaceEmbodiment, BodyAndFaceEmbodiment, FaceController
+        implements MiddlewareListener, SkeletonEmbodiment, FaceEmbodiment, BodyAndFaceEmbodiment, FaceController, FACSFaceEmbodiment
 {
 
     private Middleware middleware;
@@ -438,4 +440,9 @@ public class UnityEmbodiment extends AbstractWorker
     {
         return loaderId;
     }
+
+	@Override
+	public void setAUs(AUConfig... configs) {
+		log.info("GOT AUS");
+	}
 }
